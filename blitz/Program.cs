@@ -92,10 +92,14 @@ namespace emicoviBlitz
             SettingsMenu.AddLabel("HARASS");
             SettingsMenu.Add("Qh", new CheckBox("Use Q", true));
             SettingsMenu.Add("Eh", new CheckBox("Use E", true));
-            SettingsMenu.AddLabel("LANE CLEAR");
+            // SettingsMenu.AddLabel("LANE CLEAR");
             //SettingsMenu.Add("Rlc",new CheckBox("Lane Clear with R",true));
             //SettingsMenu.Add("minionw", new Slider("Min Minions to use R to Lane Clear",0, 1, 50));
             //SettingsMenu.Add("mana.lane", new Slider("Min Mana to use R to Lane Clear ({0}%)", 10, 100));
+           SettingsMenu.AddLabel("SMART KS");
+            SettingsMenu.Add("KSQ", new CheckBox("Use Q", false));
+            SettingsMenu.Add("KSE", new CheckBox("Use E", false));
+            SettingsMenu.Add("KSR", new CheckBox("Use R", false));
 
             SettingsMenu.AddLabel("JUNGLE STEAL");
             SettingsMenu.Add("ksjg", new KeyBind("Q Steal Drag/Baron", false, KeyBind.BindTypes.HoldActive));
@@ -114,11 +118,58 @@ namespace emicoviBlitz
             Drawing.OnDraw += Drawing_OnDraw;
         }
 
+        private static void KillSteal()
+        {
+            var targetq = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
+            var useQ = SettingsMenu["KSQ"].Cast<CheckBox>().CurrentValue;
+
+            if (useQ && Q.IsReady() && targetq.IsValidTarget(Q.Range) && !targetq.IsZombie && !targetq.IsInvulnerable &&
+                targetq.Health <= _Player.GetSpellDamage(targetq, SpellSlot.Q))
+            {
+                Q.Cast(targetq);
+            }
+            var targetE = TargetSelector.GetTarget(E.Range, DamageType.Magical);
+            var useE = SettingsMenu["KSE"].Cast<CheckBox>().CurrentValue;
+
+            if (useE && E.IsReady() && targetE.IsValidTarget(E.Range) && !targetE.IsZombie && !targetE.IsInvulnerable &&
+                targetE.Health <= _Player.GetSpellDamage(targetE, SpellSlot.E))
+            {
+                E.Cast(targetE);
+            }
+            var targetR = TargetSelector.GetTarget(R.Range, DamageType.Magical);
+            var useR = SettingsMenu["KSR"].Cast<CheckBox>().CurrentValue;
+
+            if (useR && R.IsReady() && targetR.IsValidTarget(R.Range) && !targetR.IsZombie && !targetR.IsInvulnerable &&
+                targetR.Health <= _Player.GetSpellDamage(targetR, SpellSlot.R))
+
+            {
+                R.Cast(targetR);
+            }
+        }
+
+        private static void Autospells()
+        {
+            var target = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
+            if (target == null)
+                return;
+            if (target.IsInvulnerable)
+                return;
+            if (Q.IsReady() && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).HitChancePercent >= 95)
+            {
+                Q.Cast(target);
+                E.Cast(target);
+            }
+        }
+
 
         private static void Game_OnTick(EventArgs args)
         {
             if (_Player.IsDead || _Player.IsRecalling()) return;
 
+
+            KillSteal();
+            if (SettingsMenu["auto"].Cast<CheckBox>().CurrentValue) { Autospells(); }
+            JgSteal();
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
