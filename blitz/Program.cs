@@ -32,11 +32,6 @@ namespace emicoviBlitz
         public static Spell.Active E;
         public static Spell.Active R;
 
-        private static float QMANA = 0, WMANA = 0, EMANA = 0, RMANA = 0;
-
-        private static int grab = 0, grabS = 0;
-
-        private static float grabW = 0;
 
         private static string[] JungleMobsList =
            {
