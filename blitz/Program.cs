@@ -157,7 +157,7 @@ namespace emicoviBlitz
             if (target.IsInvulnerable)
                 return;
             if (Q.IsReady() && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).HitChancePercent >= 95 && target.IsValidTarget() && !target.HasBuffOfType(BuffType.SpellImmunity) &&
-                    !target.HasBuffOfType(BuffType.SpellShield) &&)
+                    !target.HasBuffOfType(BuffType.SpellShield)&&)
             {
                 Q.Cast(target);
                 E.Cast(target);
