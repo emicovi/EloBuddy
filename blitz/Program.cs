@@ -149,13 +149,6 @@ namespace emicoviBlitz
             var Edraw = SettingsMenu["Edrawn"].Cast<CheckBox>().CurrentValue;
             var Rdraw = SettingsMenu["Rdrawn"].Cast<CheckBox>().CurrentValue;
 
-            if (SettingsMenu["showgrab"].Cast<CheckBox>().CurrentValue)
-            {
-                var percent = 0f;
-                if (grab > 0)
-                    percent = ((float)grabS / (float)grab) * 100f;
-                Drawing.DrawText(Drawing.Width * 0f, Drawing.Height * 0.4f, System.Drawing.Color.YellowGreen, " grab: " + grab + " grab successful: " + grabS + " grab successful % : " + percent + "%");
-            }
 
             if (Qdraw)
             {
