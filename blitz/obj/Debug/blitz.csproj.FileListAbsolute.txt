@@ -1,0 +1,2 @@
+c:\users\emico\onedrive\documents\visual studio 2015\Projects\blitz\blitz\bin\Debug\blitz.exe.config
+c:\users\emico\onedrive\documents\visual studio 2015\Projects\blitz\blitz\obj\Debug\blitz.csprojResolveAssemblyReference.cache
