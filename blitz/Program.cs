@@ -100,6 +100,8 @@ namespace emicoviBlitz
             SettingsMenu.Add("KSQ", new CheckBox("Use Q", false));
             SettingsMenu.Add("KSE", new CheckBox("Use E", false));
             SettingsMenu.Add("KSR", new CheckBox("Use R", false));
+            SettingsMenu.AddLabel("AUTO SPELL");
+            SettingsMenu.Add("auto", new CheckBox("Use AutoSpell", false));
 
             SettingsMenu.AddLabel("JUNGLE STEAL");
             SettingsMenu.Add("ksjg", new KeyBind("Q Steal Drag/Baron", false, KeyBind.BindTypes.HoldActive));
@@ -154,7 +156,8 @@ namespace emicoviBlitz
                 return;
             if (target.IsInvulnerable)
                 return;
-            if (Q.IsReady() && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).HitChancePercent >= 95)
+            if (Q.IsReady() && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).HitChancePercent >= 95 && target.IsValidTarget() && !target.HasBuffOfType(BuffType.SpellImmunity) &&
+                    !target.HasBuffOfType(BuffType.SpellShield) &&)
             {
                 Q.Cast(target);
                 E.Cast(target);
